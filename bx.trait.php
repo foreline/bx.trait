@@ -15,49 +15,49 @@
         public string $errorMessage = '';
         
         /** @var int $iblockID ID инфоблока */
-        public int $iblockID = 0;
+        public int $iblockID;
 
         /** @var string Символьный код инфоблока */
-        public string $iblockCode = '';
+        public string $iblockCode;
         
         /** @var string $iblockName Название инфоблока */
-        public string $iblockName = '';
+        public string $iblockName;
 
         /** @var string $iblockType Тип инфоблока */
-        public string $iblockType = '';
+        public string $iblockType;
 
         /** @var string $iblockDescription Описание инфоблока */
-        public string $iblockDescription = '';
+        public string $iblockDescription;
         
         /** @var int $iblockSort Сортировка инфоблока */
-        public int $iblockSort = 0;
+        public int $iblockSort;
         
         /** @var string $listPageUrl URL страницы информационного блока */
-        public string $listPageUrl = '';
+        public string $listPageUrl;
         
         /** @var string $sectionPageUrl URL страницы раздела */
-        public string $sectionPageUrl = '';
+        public string $sectionPageUrl;
         
         /** @var string $elementName Название элемента инфоблока из настроек инфоблока. Заполняется методом getIBlockInfo() */
-        public string $elementName = '';
+        public string $elementName;
         
         /** @var string $elementsName Название элементов инфоблока из настроек инфоблока. Заполняется методом getIBlockInfo() */
-        public string $elementsName = '';
+        public string $elementsName;
         
         /** @var string $sectionName Название раздела инфоблока из настроек инфоблока. Заполняется методом getIBlockInfo() */
-        public string $sectionName = '';
+        public string $sectionName;
         
         /** @var string $sectionsName Название разделов инфоблока из настроек инфоблока. Заполняется методом getIBlockInfo() */
-        public string $sectionsName = '';
+        public string $sectionsName;
         
         /** @var string $elementAdd Подписи и заголовки объектов: Добавить элемент */
-        public string $elementAdd = '';
+        public string $elementAdd;
         
         /** @var string $elementEdit Подписи и заголовки объектов: Изменить элемент */
-        public string $elementEdit = '';
+        public string $elementEdit;
         
         /** @var string $elementDelete Подписи и заголовки объектов: Удалить элемент */
-        public string $elementDelete = '';
+        public string $elementDelete;
 
         /**
          * Конструктор
@@ -228,6 +228,11 @@
             require_once $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_before.php';
             if ( ! \Bitrix\Main\Loader::includeModule('iblock') ) {
                 $this->errorMessage = 'Модуль "Инфоблоки" не установлен';
+                return false;
+            }
+
+            if ( empty($this->iblockCode) ) {
+                $this->errorMessage = 'Не задан символьный код инфоблока';
                 return false;
             }
             

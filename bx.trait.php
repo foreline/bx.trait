@@ -1,6 +1,6 @@
 <?php
     /**
-     * Трейт для работы с инфоблоками Битрикса
+     * Трейт для работы с информационными блоками Битрикса
      * 
      * @package bitrix
      * @subpackage iblock
@@ -16,6 +16,9 @@
         
         /** @var int $iblockID ID инфоблока */
         public int $iblockID = 0;
+
+        /** @var string Символьный код инфоблока */
+        public string $iblockCode = '';
         
         /** @var string $iblockName Название инфоблока */
         public string $iblockName = '';
@@ -71,7 +74,7 @@
          * Возвращает массив, описывающий элемент по его ID
          *
          * @param int $elementID ID элемента инфоблока
-         * @param array $arFilter [optional] Дополнительные ключи для фильтра. По умолчанию выборка производится по указанному ID элемента и текущему инфоблоку.
+         * @param array $arFilter [optional] Дополнительные ключи для фильтра. По умолчанию выборка производится по-указанному ID элемента и текущему инфоблоку.
          * @return array|bool $arElement Массив, описывающий элемент инфоблока
          */
         public function getByID(int $elementID, array $arFilter = [])
@@ -184,7 +187,7 @@
         /**
          * Возвращает массив, описывающий элемент по символьному коду элемента
          * 
-         * @param string $elementCode Символьный элемента инфоблока
+         * @param string $elementCode Символьный код элемента инфоблока
          * @return array|bool $arElement Массив, описывающий элемент инфоблока
          */
         
@@ -249,9 +252,15 @@
             $this->iblockSort = $arIBlock['SORT'];
             
             $listPageUrl = str_replace('#SITE_DIR#', SITE_DIR, $arIBlock['LIST_PAGE_URL']);
+            $listPageUrl = str_replace('#IBLOCK_CODE#', $this->iblockCode, $listPageUrl);
+            $listPageUrl = str_replace('#IBLOCK_ID#', $this->iblockID, $listPageUrl);
+            $listPageUrl = str_replace('#IBLOCK_TYPE_ID#', $this->iblockType, $listPageUrl);
             $this->listPageUrl = str_replace('//', '/', $listPageUrl);
             
             $sectionPageUrl = str_replace('#SITE_DIR#', SITE_DIR, $arIBlock['SECTION_PAGE_URL']);
+            $sectionPageUrl = str_replace('#IBLOCK_CODE#', $this->iblockCode, $sectionPageUrl);
+            $sectionPageUrl = str_replace('#IBLOCK_ID#', $this->iblockID, $sectionPageUrl);
+            $sectionPageUrl = str_replace('#IBLOCK_TYPE_ID#', $this->iblockType, $sectionPageUrl);
             $this->sectionPageUrl = str_replace('//', '/', $sectionPageUrl);
             
             /*
@@ -340,7 +349,7 @@
          * 
          * @param array $arFields Массив со значениями полей элемента и его свойствами.
          * $arFields = [
-         *  'NAME'  => 'Название',
+         *  'NAME'      => 'Название',
          *  'ACTIVE'    => 'Y',
          *  'SORT'      => 500,
          *  'PROPERTY_CODE' => 'PROPERTY_VALUE',
@@ -377,7 +386,7 @@
             // Активность
             $arIBlockFields['ACTIVE'] = (!empty($arFields['ACTIVE']) && 'N' == $arFields['ACTIVE'] ? 'N' : 'Y');
             
-            // Сортирова
+            // Сортировка
             if ( !empty($arFields['SORT']) && 0 <= intval($arFields['SORT']) ) {
                 $arIBlockFields['SORT'] = intval($arFields['SORT']);
             }
@@ -689,7 +698,7 @@
          * Учитываются права заданные на конкретного пользователя, так и на группы, в которых состоит пользователь.
          * 
          * @param int $elementID ID элемента инфоблока
-         * @param int [optional] $userID ID пользователя, если не задан проверка осущещствляется для текущего пользователя
+         * @param int [optional] $userID ID пользователя, если не задан, то проверка осуществляется для текущего пользователя
          * 
          * @return bool $userCanEdit
          */
